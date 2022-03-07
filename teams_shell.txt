@@ -1,0 +1,112 @@
+>>> from news.models import *
+
+#Создаем пользователей
+>>> u1 = User.objects.create_user(username='MrPit')
+>>> u2 = User.objects.create_user(username='Saymon')
+
+#Создаем авторов
+>>> Author.objects.create(authorUser=u1)
+>>> Author.objects.create(authorUser=u2)
+
+#Соездаем категории
+>>> Category.objects.create(name_categories='IT')
+>>> Category.objects.create(name_categories='FM')
+>>> Category.objects.create(name_categories='MC')
+
+
+>>> author = Author.objects.get(id=1)
+>>> author1 = Author.objects.get(id=2)
+
+#создаем посты 
+>>> Post.objects.create(author=author, categoryType='AR', title='22-летний американец сделал микросхему с 1200 транзисторами в гараже родителей', text='22-летний Сэм Зелуф изготовил микросхему с 1200 транзисторами в одиночку в собственном гараже в Нью-Джерси. Он использовал самодельное оборудование.')
+
+>>> Post.objects.create(author=author, categoryType='AR', title='GitHub заявил о поддержке всех разработчиков, независимо от их места проживания', text='2 марта 2022 года представители команды веб-сервиса для хостинга IT-проектов и их совместной разработки GitHub решили не блокировать российских разработчиков. Платформа заявила, что будет следить за ситуацией на Украине и не позволит попасть под блокировку всем подряд.')
+
+>>> Post.objects.create(author=author, categoryType='NW',title='Роскомнадзор блокирует Zello', text='6 марта 2022 года Роскомнадзор объявил о начале блокировки бесплатного приложения для общения Zello. Регулятор пояснил, что администрация данного сервиса не исполнила требования РКН по немедленному прекращению рассылок пользователям сообщений, в которых содержится недостоверная информация.')
+
+>>> Post.objects.create(author=author1, categoryType='AR', title='КОРОТКОМЕТРАЖНЫЙ ФИЛЬМ ОТ СОЗДАТЕЛЯ «ОЛДБОЯ»', text='Корейский режиссер Пак Чхан-ук принял участие в кампании «Снято на iPhone». Используя два премиальных смартфона от Apple (речь идет об iPhone 13), постановщик создал занятный жанровый сплав, совмещающий мюзикл, комедию, мистику и боевик про восточные единоборства, какие пачками снимали в Гонконге 90-х.')
+
+>>> Post.objects.create(author=author1, categoryType='AR', title='Что показали в тизере сериала «Властелин колец»?', text='Во время финала Супербоула, который прошел в ночь с 13 на 14 февраля, показали тизер сериала «Властелин колец: Кольца власти». Это амбициозный проект Amazon, на который хотят потратить 1 млрд долларов. До премьеры еще полгода (старт — 2 сентября на Amazon Prime Video). Разбираем, что показали в тизере шоу и что еще нужно о нем знать.')
+
+>>> Post.objects.create(author=author1, categoryType='NW', title='Умер актер Леонид Куравлев. Ему было 85 лет.О смерти артиста сообщили в Союзе кинематографистов России.В начале января Куравлев был госпитализирован в городскую клиническую больницу № 40 в Коммунарке, его лечили от пневмонии. Последние дни актер провел в хосписе.Куравлев успел сняться в более чем 200 фильмах и сериалах. Среди его наиболее известных ролей — Жорж Милославский из фильма «Иван Васильевич меняет профессию», Шура Балаганов из «Золотого теленка» и сантехник Афанасий Борщов из «Афони».')
+
+#присваиваем посты категориям по id
+>>> Post.objects.get(id=1).post_category.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=2).post_category.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=3).post_category.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=4).post_category.add(Category.objects.get(id=2))
+>>> Post.objects.get(id=5).post_category.add(Category.objects.get(id=2))
+>>> Post.objects.get(id=6).post_category.add(Category.objects.get(id=2))
+
+#создаем комментарии
+>>> Comment.objects.create(comment_post=Post.objects.get(id=1), comment_user=Author.objects.get(id=2).authorUser, text='Чел гений просто...')
+>>> Comment.objects.create(comment_post=Post.objects.get(id=2), comment_user=Author.objects.get(id=2).authorUser, text='это печально')
+>>> Comment.objects.create(comment_post=Post.objects.get(id=3), comment_user=Author.objects.get(id=2).authorUser, text='это печально')
+>>> Comment.objects.create(comment_post=Post.objects.get(id=2), comment_user=Author.objects.get(id=2).authorUser, text='гидхаб в моем сердце >.<')
+>>> Comment.objects.create(comment_post=Post.objects.get(id=4), comment_user=Author.objects.get(id=1).authorUser, text='наверное это хорошая новость 0.0')
+>>> Comment.objects.create(comment_post=Post.objects.get(id=5), comment_user=Author.objects.get(id=1).authorUser, text='афро-эльфы это конечно прикол.хотелось бы увидить тот самы властелин колец которого мы заслуживаем=)')
+>>> Comment.objects.create(comment_post=Post.objects.get(id=6), comment_user=Author.objects.get(id=1).authorUser, text='ужасная новость')
+
+#создание лайков и дизлайков
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).dislike()
+>>> Comment.objects.get(id=2).dislike()
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=4).like()
+>>> Comment.objects.get(id=5).like()
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=5).like()
+>>> Comment.objects.get(id=5).like()
+>>> Comment.objects.get(id=5).like()
+>>> Comment.objects.get(id=4).like()
+>>> Comment.objects.get(id=2).dislike()
+>>> Comment.objects.get(id=3).dislike()
+>>> Comment.objects.get(id=3).dislike()
+>>> Comment.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=5).dislike()
+
+#проверяем рейтинг пользователя a(id=1)
+>>> a = Author.objects.get(id=1)
+>>> a.update_rating()
+>>> a.rating_author
+8
+
+#проверяем рейтинг пользователя b(id=2)
+>>> b = Author.objects.get(id=2)
+>>> b.update_rating()
+>>> b.rating_author
+4
+
+#вывод пользователя с лучшим рейтингом
+>>> a = Author.objects.order_by('-rating_author')[:1]
+>>> a
+<QuerySet [<Author: Author object (1)>]>
+
+#вывод кол-во рейтинга и username лучшего пользователя
+>>> for i in a:
+...     i.rating_author
+...     i.authorUser.username
+...
+8
+'MrPit'
+
+>>> Post.objects.get(id=1).text
+'22-летний Сэм Зелуф изготовил микросхему с 1200 транзисторами в одиночку в собственном гараже в Нью-Джерси. Он использовал самодельное оборудование.'
+
+>>> Post.objects.get(id=1).title
+'22-летний американец сделал микросхему с 1200 транзисторами в гараже родителей'
+
+>>> Post.objects.get(id=1).date_creation
+datetime.datetime(2022, 3, 6, 12, 16, 41, 13492, tzinfo=datetime.timezone.utc)
+
+
